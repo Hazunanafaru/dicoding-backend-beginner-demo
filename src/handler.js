@@ -63,4 +63,41 @@ const getNoteHandler = (request, h) => {
   return response;
 };
 
-module.exports = {addNoteHandler, getAllNotesHandler, getNoteHandler};
+const editNoteByIdHandler = (request, h) => {
+  const {id} = request.params;
+  const {tittle, tags, body} = request.payload;
+  const updateAt = new Date().toISOString();
+
+  const index = notes.findIndex((n) => n.id === id);
+
+  if (index !== -1) {
+    notes[index] = {
+      ...notes[index],
+      tittle,
+      tags,
+      body,
+      updateAt,
+    };
+
+    const response = h.response({
+      status: 'success',
+      message: 'Note is updated',
+    });
+    response.code(200);
+    return response;
+  }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'Failed to update. Id not found',
+  });
+  response.code(404);
+  return response;
+};
+
+module.exports = {
+  addNoteHandler,
+  getAllNotesHandler,
+  getNoteHandler,
+  editNoteByIdHandler,
+};

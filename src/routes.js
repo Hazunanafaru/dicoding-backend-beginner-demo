@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-const {addNoteHandler, getAllNotesHandler, getNoteHandler} = require('./handler');
+const {addNoteHandler, getAllNotesHandler, getNoteHandler, editNoteByIdHandler} = require('./handler');
 
 const routes = [
   {
@@ -16,6 +16,11 @@ const routes = [
     method: 'GET',
     path: '/notes/{id}',
     handler: getNoteHandler,
+  },
+  {
+    method: 'PUT',
+    path: '/notes/{id}',
+    handler: editNoteByIdHandler,
   },
 ];
 
