@@ -2,13 +2,13 @@ const nanoid = require('nanoid');
 const notes = require('./notes');
 
 const addNoteHandler = (request, h) => {
-  const {tittle, tags, body} = request.payload;
+  const {title, tags, body} = request.payload;
   const id = nanoid.nanoid(16);
   const createdAt = new Date().toISOString();
   const updateAt = createdAt;
 
   const newNote = {
-    tittle, tags, body, id, createdAt, updateAt,
+    title, tags, body, id, createdAt, updateAt,
   };
   notes.push(newNote);
 
@@ -95,9 +95,33 @@ const editNoteByIdHandler = (request, h) => {
   return response;
 };
 
+const deleteNoteByIdHandler = (request, h) => {
+  const {id} = request.params;
+
+  const index = notes.findIndex((n) => n.id === id);
+
+  if (index !== -1) {
+    notes.splice(index, 1);
+    const response = h.response({
+      status: 'success',
+      message: 'Note is deleted',
+    });
+    response.code(200);
+    return response;
+  }
+
+  const response = h.response({
+    status: 'fail',
+    message: 'Failed to delete. Id not found',
+  });
+  response.code(404);
+  return response;
+};
+
 module.exports = {
   addNoteHandler,
   getAllNotesHandler,
   getNoteHandler,
   editNoteByIdHandler,
+  deleteNoteByIdHandler,
 };
